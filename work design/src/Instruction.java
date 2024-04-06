@@ -4,7 +4,6 @@ public class Instruction {
 
     // Enum to represent the instruction state
     public Instruction(){
-
     }
 
     public Instruction(int index, InstructionState state) {

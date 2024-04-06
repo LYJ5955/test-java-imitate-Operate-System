@@ -630,6 +630,7 @@ public class OS {
 
                                     // while 循环执行一页中的内容，如果该页内容执行完毕，则跳出此while循环
                                     while (thProcess.getPc ()<MemoryBlock.BlockSize){
+
                                         Instruction tpInstruction = tpBlock.getInstruction (thProcess.getPc ());
                                         timer++;
                                         if(tpInstruction.getState ()==InstructionState.IO){
