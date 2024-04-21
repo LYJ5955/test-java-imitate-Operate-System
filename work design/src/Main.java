@@ -6,8 +6,10 @@ public class Main {
         OS myOs = new OS ();
         IoClass ioClass = new IoClass ();
         ioClass.start ();
-        myOs.start ();
-        myOs.run ();
+        UseOs useOs = new UseOs ();
+        useOs.start ();
+//        myOs.start ();
+//        myOs.run ();
 
     }
 }

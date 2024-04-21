@@ -177,7 +177,7 @@ public class OS {
             return false;
         }
     }
-    public String createDirectory(String directoryName){
+    public static String createDirectory(String directoryName){
         /*
         * 判断是否存在重名文件夹 - 同样，不需要这个逻辑！
         * 但是要将文件夹加入到文件夹Map中去
@@ -243,7 +243,7 @@ public class OS {
             return false;
         }
     }
-    public String createFile(String fileName,String dirName){
+    public static String createFile(String fileName,String dirName){
         /*
          * 判断是否存在重名文件 -
          * 不需要这个逻辑，在调用函数之前已经确定不会出现这个问题
@@ -465,7 +465,7 @@ public class OS {
         }
     }
 
-    public void createWorkflow(Scanner scanner){
+    public static void createWorkflow(Scanner scanner){
         String input;
         while (true) {
             System.out.println("\nWould you like to [1] Create Directory, [2] Create File, [3] Create Process, or [4] Exit Setup?");
@@ -496,7 +496,7 @@ public class OS {
         }
     }
 
-    public void createDirectoryWorkflow(Scanner scanner) {
+    public static void createDirectoryWorkflow(Scanner scanner) {
         /*
         * 1. judge whether existed this name Directory
         *   if not , go create directory and add it to directoryMap and reminder success, return true
@@ -514,7 +514,7 @@ public class OS {
 
     }
 
-    public void createFileWorkflow(Scanner scanner) {
+    public static void createFileWorkflow(Scanner scanner) {
         System.out.print("Enter Directory Name to add File (or type 'none' if no directory): ");
         String dirName = scanner.nextLine();
 

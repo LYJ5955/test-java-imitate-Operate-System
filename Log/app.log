@@ -1,2 +1,10 @@
 2024-04-21 10:41:06  [ main:0 ] - [ INFO ]  this is a debug message
 2024-04-21 10:41:06  [ main:5 ] - [ ERROR ]  this is a error
+2024-04-21 10:49:54  [ main:0 ] - [ INFO ]  this is a debug message
+2024-04-21 10:49:54  [ main:10 ] - [ ERROR ]  this is a error
+2024-04-21 10:50:30  [ main:0 ] - [ INFO ]  this is a debug message
+2024-04-21 10:50:30  [ main:3 ] - [ ERROR ]  this is a error
+2024-04-21 11:01:46  [ main:0 ] - [ INFO ]  this is a debug message
+2024-04-21 11:01:46  [ main:5 ] - [ ERROR ]  this is a error
+2024-04-21 11:10:02  [ main:0 ] - [ INFO ]  this is a debug message
+2024-04-21 11:10:02  [ main:7 ] - [ ERROR ]  this is a error
