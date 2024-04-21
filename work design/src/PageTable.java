@@ -133,7 +133,7 @@ public class PageTable {
         System.out.println ("process pid:"+tProcess.getPid ()+" 发生缺页错误");
         int needPhysical = tProcess.getPcPage ()+tProcess.getBeginMemoryIndex ();
         try{
-            int ptIndex = tProcess.getPageTableIndex ().get (0);
+            int ptIndex = tProcess.selectPtEntryIndex ().get (0);
             entries[ptIndex] = new PageTableEntry (needPhysical,
                     true, false, AccessPermissions.ALL, tProcess.getPid ());
         }catch (Exception e){

@@ -5,5 +5,7 @@ public enum InterruptState {
     ElectronicBreak,
     SystemCall,
     ProcessTerminate,
+    PriorityAdjust,
+    CreateProcess,
     NoInterrupt,
 }

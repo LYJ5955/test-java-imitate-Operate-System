@@ -1,6 +1,9 @@
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 public class OS {
+    public static Logger logger = Logger.getLogger (OS.class);
     // 进程管理部分数据结构
     public static Map<Integer, ProcessStruct> processMap;
     public static Queue<Integer> readyQueue;
@@ -50,6 +53,8 @@ public class OS {
     }
 
     public OS () {
+        logger.info ("this is a debug message");
+        logger.error ("this is a error");
         /*
          * 1. initiate the processMap and four process queues
          * 2. initiate the fileMap and pageTable and memoryManager
@@ -121,7 +126,7 @@ public class OS {
 
 
     // For example, a method to create a new process:
-    public Integer createProcess (String processName, int priority, int memorySize,String fileName) {
+    public static Integer createProcess (String processName, int priority, int memorySize,String fileName) {
 
         /*
          * implementation of process creation
@@ -546,7 +551,7 @@ public class OS {
         }
     }
 
-    public void createProcessWorkflow(Scanner scanner) {
+    public static void createProcessWorkflow(Scanner scanner) {
         System.out.print("Enter File Name to add Process: ");
         String fileName = scanner.nextLine();
         if (!fileMap.containsKey(fileName)) {

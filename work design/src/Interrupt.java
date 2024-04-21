@@ -1,3 +1,6 @@
+import java.util.Random;
+import java.util.Scanner;
+
 public abstract class Interrupt {
     private InterruptState state; // 中断的状态
     private int priority; // 中断的优先级
@@ -65,6 +68,35 @@ class IoBeginInterrupt extends Interrupt {
         OS.interruptManager.setIsSchedule (true);
     }
 }
+class priorityAdjustInterrupt extends Interrupt {
+    private int pid;
+    public priorityAdjustInterrupt(int pid,int priority) {
+        super(InterruptState.PriorityAdjust, priority);
+        this.pid = pid;
+    }
+
+    @Override
+    public void handle() {
+        System.out.println("Handling priority Adjust Interrupt with priority: " + getPriority()+" for process: "+this.pid);
+        // 改变优先级
+        Random random = new Random();
+        int randomNumber = 1 + random.nextInt(OS.priorityMax);  // nextInt(max) 生成一个0到max-1的随机数
+        OS.processMap.get (pid).setPid (randomNumber);
+    }
+}
+class CreateProcessInterrupt extends Interrupt {
+    public CreateProcessInterrupt(int priority) {
+        super(InterruptState.CreateProcess, priority);
+    }
+
+    @Override
+    public void handle() {
+        System.out.println("Create new process use Interrupt");
+        // 实现系统调用的处理逻辑
+        Scanner scanner=new Scanner (System.in);
+        OS.createProcessWorkflow (scanner);
+    }
+}
 
 class TimeSliceInterrupt extends Interrupt {
     public TimeSliceInterrupt(int priority) {
@@ -130,3 +162,4 @@ class SystemCallInterrupt extends Interrupt {
         // 实现系统调用的处理逻辑
     }
 }
+
