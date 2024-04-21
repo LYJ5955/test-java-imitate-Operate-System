@@ -11,6 +11,7 @@ public class UseOs extends Thread {
             System.out.println("3: Create Process");
             System.out.println("4: Shutdown System");
             System.out.println("5: Adjust Priority");
+            System.out.println("6: Output System Information");
             System.out.println("Please input:");
 
             if (scanner.hasNextInt()) {
@@ -30,6 +31,9 @@ public class UseOs extends Thread {
                         break;
                     case 5:
                         //adjustPriority(scanner);
+                        break;
+                    case 6:
+                        //(scanner);
                         break;
                     case 0:
                         //System.out.println("Exiting...");

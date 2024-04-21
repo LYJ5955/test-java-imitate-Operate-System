@@ -1,5 +1,7 @@
 import java.util.*;
+import org.apache.log4j.Logger;
 public class PageTable {
+    public static Logger logger = Logger.getLogger (PageTable.class);
 
     // A pageTable is a set of PageTableEntry
 
@@ -79,7 +81,8 @@ public class PageTable {
 
     // allocate the entries for the process
     public void allocateEntries(ProcessStruct tpProcess){
-        System.out.println ("allocate the entries for the process pid:"+tpProcess.getPid ());
+        //System.out.println ("allocate the entries for the process pid:"+tpProcess.getPid ());
+        logger.info ("PageTable Management: allocate the entries for the process pid:"+tpProcess.getPid ()+".");
         /*
         * allocatedEntries for the process
         * two condition
@@ -130,14 +133,14 @@ public class PageTable {
     }
     // 处理 缺页错误
     public void pageTableFault(ProcessStruct tProcess){
-        System.out.println ("process pid:"+tProcess.getPid ()+" 发生缺页错误");
+        logger.info ("PageTable Management: process PID: " + tProcess.getPid() + " encountered a page fault.");
         int needPhysical = tProcess.getPcPage ()+tProcess.getBeginMemoryIndex ();
         try{
             int ptIndex = tProcess.selectPtEntryIndex ().get (0);
             entries[ptIndex] = new PageTableEntry (needPhysical,
                     true, false, AccessPermissions.ALL, tProcess.getPid ());
         }catch (Exception e){
-            System.out.println ("该进程无页表项,需要被分配页表");
+            logger.info ("This process has no page entries and needs to be assigned a page table.");
             allocateEntries (tProcess);
         }
     }

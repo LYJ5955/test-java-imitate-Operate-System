@@ -8,4 +8,5 @@ public enum InterruptState {
     PriorityAdjust,
     CreateProcess,
     NoInterrupt,
+    OutputSysInformation,
 }

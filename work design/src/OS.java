@@ -39,6 +39,7 @@ public class OS {
     public static InterruptManager interruptManager;
 
     public static synchronized void addInterrupt(Interrupt tpInterrupt){
+        logger.info ("Interrupt Management: Add a new interrupt.");
         interruptManager.addInterrupt (tpInterrupt);
     }
 
@@ -53,8 +54,8 @@ public class OS {
     }
 
     public OS () {
-        logger.info ("this is a debug message");
-        logger.error ("this is a error");
+//        logger.info ("this is a debug message");
+//        logger.error ("this is a error");
         /*
          * 1. initiate the processMap and four process queues
          * 2. initiate the fileMap and pageTable and memoryManager
@@ -105,16 +106,19 @@ public class OS {
         switch (choice) {
             case 1:
                 System.out.println ("You selected FCFS (First-Come, First-Served).");
+                logger.info ("Select FCFS schedule");
                 scheduler = new FCFSScheduler ();
                 scheduleRecord = ScheduleRecord.FCFS;
                 break;
             case 2:
                 System.out.println ("You selected Priority Preemptive.");
+                logger.info ("Select Priority Preemptive schedule");
                 scheduler = new PriorityScheduler ();
                 scheduleRecord = ScheduleRecord.PRIORITY;
                 break;
             case 3:
                 System.out.println ("You selected Time Slice (Round Robin).");
+                logger.info ("Select Time Slice (Round Robin) schedule");
                 scheduler = new TImeSliceScheduler ();
                 scheduleRecord = ScheduleRecord.TIME;
                 break;
@@ -145,9 +149,16 @@ public class OS {
                     tpPid, processName, ProcessState.READY, priority, memorySize);
             processMap.put (tpPid, tpProcess);
             readyQueue.add (tpPid);
+            logger.info("Process Management: MemoryBeginIndex: " + beginIndex +
+                    ", PID: " + tpPid +
+                    ", Name: '" + processName + '\'' +
+                    ", State: " + tpProcess.getState () +
+                    ", Priority: " + priority +
+                    ", MemorySize: " + memorySize );
             fileMap.get(fileName).addProcess(tpPid);
         }else{
-            System.out.println ("Memory not enough,process create fail");
+            logger.error ("Memory Management: Memory not enough, process create fail\n");
+            System.out.println ("Memory not enough,process create fail\n");
             return -1;
         }
         return tpPid;
@@ -168,12 +179,21 @@ public class OS {
         if (processMap.containsKey(pid) && processMap.get(pid).getState() != ProcessState.TERMINATED) {
             ProcessStruct process = processMap.get(pid);
             process.setState(ProcessState.TERMINATED); // Mark the process as terminated
+            logger.info("Process Management: PID: " + pid + " - Process state changed to TERMINATED.");
+
             memoryManager.freeMemory(pid); // Free memory allocated to the process
+            logger.info("Process Management: PID: " + pid + " - Process memory has been freed.");
+
             pageTable.freeProcessPageEntry(pid); // Free page table entries associated with the process
-            System.out.println("PID: " + pid + " process has been deleted successfully.");
+            logger.info("PageTable Management: Freed page table entries for PID: " + pid + ".");
+
+            System.out.println("PID: " + pid + " process has been successfully deleted.");
+            logger.info("File Management: PID: " + pid + " - Process successfully deleted.");
             return true;
+
         } else {
             System.out.println("The PID is illegal or the process is already terminated, unable to delete.");
+
             return false;
         }
     }
@@ -184,7 +204,7 @@ public class OS {
          */
         Directory tpDirectory = new Directory (directoryName);
         directoryMap.put (directoryName, tpDirectory);
-        System.out.println ("The directory "+directoryName+" create successfully");
+        //System.out.println ("The directory "+directoryName+" create successfully");
         return directoryName;
 
     }
@@ -204,6 +224,7 @@ public class OS {
                 }
             }
             directoryMap.remove (directoryName);
+            logger.info ("File Management: delete the Directory name: "+directoryName+"\n");
             return true;
         }else {
             System.out.println ("Not have "+directoryName+" directory in system");
@@ -236,7 +257,7 @@ public class OS {
                     }
                 }
             }
-
+            logger.info ("File Management: delete the File name: "+fileName+"\n");
             return true;
         }else {
             System.out.println ("Not have "+fileName+" file in system");
@@ -268,6 +289,7 @@ public class OS {
         }
 
         System.out.println("The file '" + fileName + "' was created successfully.");
+        logger.info ("File Management: The file '" + fileName + "' was created successfully.");
         return fileName;
 
     }
@@ -285,7 +307,7 @@ public class OS {
         inspectWorkflow (scanner); //展示工作
         deleteWorkflow (scanner); //删除工作
 
-        System.out.println ("\n Pre-configuration End, let's running!!!\n");
+        System.out.println ("\n Pre-configuration End, let's running!!!\n\n");
     }
     public void testExampleCreate() {
 //        createDirectory ("Dir1");
@@ -371,6 +393,7 @@ public class OS {
                     String directoryName = scanner.nextLine();
                     if (deleteDirectory(directoryName)) {
                         System.out.println("Directory '" + directoryName + "' has been deleted.");
+                        logger.info ("File Management: Directory '" + directoryName + "' has been deleted.");
                     } else {
                         System.out.println("Directory deletion failed.");
                     }
@@ -466,6 +489,7 @@ public class OS {
     }
 
     public static void createWorkflow(Scanner scanner){
+
         String input;
         while (true) {
             System.out.println("\nWould you like to [1] Create Directory, [2] Create File, [3] Create Process, or [4] Exit Setup?");
@@ -507,9 +531,12 @@ public class OS {
 
         if (directoryMap.containsKey(directoryName)) {
             System.out.println("Directory creation failed: A directory with the name '" + directoryName + "' already exists.");
+            logger.error ("File Manage: Directory creation failed: A directory with the name '" + directoryName + "' " +
+                    "already exists.");
         } else {
             createDirectory (directoryName);
             System.out.println("Directory '" + directoryName + "' created successfully.");
+            logger.info ("File Manage: Directory '" + directoryName + "' created successfully.");
         }
 
     }
@@ -524,6 +551,7 @@ public class OS {
         if(fileMap.containsKey (fileName)){
             // 这个意味着系统中不能有重名的两个文件
             System.out.println ("already exist this file in system");
+            logger.error ("File Management: already exist this file "+fileName+" in system");
             return;
         }
 
@@ -568,6 +596,7 @@ public class OS {
         int pid = createProcess(processName, priority, memorySize,fileName); // This method needs to be defined or updated
         if (pid != -1) {
             System.out.println ("The process create successfully and pid is: " + pid);
+            logger.info ("File Management: The process create successfully and pid is: " + pid);
         }else{
             System.out.println ("create process failed");
         }
@@ -576,6 +605,7 @@ public class OS {
 
     // Methods to simulate the system running, scheduling, etc.
     public void run () throws Exception {
+//        logger.info ("Begin Running!!!");
         // Implementation of the main simulation loop
         /*
         * CPU调度
@@ -590,6 +620,7 @@ public class OS {
                 int thisPid = scheduler.selectNextProcess ();
                 timer = 0;
                 if(thisPid!=-1&&processMap.containsKey (thisPid)){
+                    logger.info ("Process Management: Select PID: "+thisPid+" process to executed.");
                     /*
                      * 将进程状态改为running
                      * 从ready队列中移出，移入到running队列中
@@ -599,6 +630,7 @@ public class OS {
                     OS.readyQueue.remove (thisPid);
                     OS.runningQueue.offer (thisPid);
                     thProcess.setState (ProcessState.RUNNING);
+                    logger.info("Process Management: PID: " + thisPid + " state changed, and the owning queue was modified.");
 
 
                     /*
@@ -639,11 +671,12 @@ public class OS {
                                         Instruction tpInstruction = tpBlock.getInstruction (thProcess.getPc ());
                                         timer++;
                                         if(tpInstruction.getState ()==InstructionState.IO){
-                                            System.out.print ("Execute the IO instruction in ");
-                                            System.out.print (thProcess.getPcPage () + thProcess.getBeginMemoryIndex ());
-                                            System.out.print (" Physical page in ");
-                                            System.out.print (thProcess.getPc ()-1);
-                                            System.out.println (" Instruction for process "+thProcess.getPid ());
+                                            logger.info("IO Management: "+" Execute the IO instruction in " +
+                                                    (thProcess.getPcPage() + thProcess.getBeginMemoryIndex()) +
+                                                    " Physical page in " +
+                                                    (thProcess.getPc() - 1) +
+                                                    " Instruction for process " + thProcess.getPid());
+
 
                                             // System.out.println (" -  - 404 wait finish - - ");
 
@@ -652,13 +685,16 @@ public class OS {
                                             // thProcess.addPc ();// 指令执行完成
                                         }else {
                                             // 是计算类型的指令，继续执行
-                                            System.out.print ("Execute the calculate instruction in ");
-                                            System.out.print (thProcess.getPcPage () + thProcess.getBeginMemoryIndex ());
-                                            System.out.print (" Physical page in ");
-                                            System.out.print (thProcess.getPc ());
-                                            System.out.println (" Instruction for process "+thProcess.getPid ());
+
+                                            logger.info("CPU Management: "+" Execute the calculate instruction in " +
+                                                    (thProcess.getPcPage() + thProcess.getBeginMemoryIndex()) +
+                                                    " Physical page in " +
+                                                    thProcess.getPc() +
+                                                    " Instruction for process " + thProcess.getPid());
+
                                             thProcess.addPc ();// 指令执行完成
                                         }
+                                        //这里第一个if没问题，executeInterrupt之内有个循环
                                         if(OS.interruptManager.getInterruptNum ()!=0) {
                                             OS.interruptManager.executeInterrupt ();
                                             if(OS.interruptManager.getIsSchedule ()){
@@ -683,6 +719,8 @@ public class OS {
                                     if(thProcess.getPc ()==MemoryBlock.BlockSize){
                                         thProcess.setPc (0);
                                         thProcess.addPcPage ();
+                                        logger.info("Memory Management: Completed execution of current memory page. " +
+                                                "PC reset to 0, moved to next page. Current PcPage: " + thProcess.getPcPage());
                                     }
                                     // 判断进程是否执行完毕
                                     if(thProcess.getPcPage ()>=thProcess.getMemorySize ()){
@@ -698,7 +736,8 @@ public class OS {
                                     }
 
                                     if(timer>=timerSize&&scheduleRecord==ScheduleRecord.TIME){
-                                        System.out.println ("timer slice 时间片轮转");
+//                                        System.out.println ("timer slice 时间片轮转");
+                                        logger.info ("Process Management: Time slice rotates, rescheduling");
                                         OS.runningQueue.remove (thisPid);
                                         OS.readyQueue.offer (thisPid);
                                         thProcess.setState (ProcessState.READY);
@@ -711,6 +750,8 @@ public class OS {
                     }catch (Exception e){
                         if(thProcess.getPageTableIndex ().size ()==0){
                             System.out.println (" 进程无页表项，需要重新分配页表");
+                            logger.error ("Process Management: The process has no page table entries and requires " +
+                                    "reallocation of the page table.");
                         }
                     }
 

@@ -162,4 +162,14 @@ class SystemCallInterrupt extends Interrupt {
         // 实现系统调用的处理逻辑
     }
 }
+class OutputSysInformation extends Interrupt{
+    public OutputSysInformation(int priority) {
+        super(InterruptState.SystemCall, priority);
+    }
+    @Override
+    public void handle() {
+        System.out.println("执行系统内容输出");
+        // 实现系统调用的处理逻辑
+    }
+}
 

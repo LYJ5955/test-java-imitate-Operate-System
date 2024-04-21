@@ -1,8 +1,11 @@
+import org.apache.log4j.Logger;
+
 import java.util.*;
 
 public class InterruptManager {
     private Queue<Interrupt> interruptqueue;
     private boolean isSchedule;
+    public static Logger logger = Logger.getLogger (InterruptManager.class);
 
 
     public InterruptManager () {
@@ -18,7 +21,7 @@ public class InterruptManager {
         while (false == interruptqueue.isEmpty ()) {
             System.out.println ("Execute Interrupt");
             Interrupt interrupt = interruptqueue.poll ();
-
+            logger.info ("Interrupt Management: Execute the interrupt with "+interrupt.getState ()+" state.");
             interrupt.handle ();
         }
     }
