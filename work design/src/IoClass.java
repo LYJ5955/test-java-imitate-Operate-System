@@ -1,6 +1,10 @@
+import org.apache.log4j.Logger;
+
 public class IoClass extends Thread {
+    public static Logger logger = Logger.getLogger (IoClass.class);
     public void run() {
-        System.out.println("System Io device begin running ~");
+        //System.out.println("System Io device begin running ~");
+        logger.info ("System Io device begin running ~");
 
         while (true){
             if(OS.getBlockQueue ().size ()!=0){
@@ -24,11 +28,16 @@ public class IoClass extends Thread {
             while(tProcess.getPc ()<MemoryBlock.BlockSize
                     &&tpBlock.getInstruction (tProcess.getPc ()).getState ()==InstructionState.IO){
                 // 执行Io指令
-                System.out.print ("Execute the IO instruction in ");
-                System.out.print (tProcess.getPcPage () + tProcess.getBeginMemoryIndex ());
-                System.out.print (" Physical page in ");
-                System.out.print (tProcess.getPc ());
-                System.out.println (" Instruction for process "+tProcess.getPid ());
+//                System.out.print ("Execute the IO instruction in ");
+//                System.out.print (tProcess.getPcPage () + tProcess.getBeginMemoryIndex ());
+//                System.out.print (" Physical page in ");
+//                System.out.print (tProcess.getPc ());
+//                System.out.println (" Instruction for process "+tProcess.getPid ());
+                logger.info ("Execute the IO instruction in " +
+                        (tProcess.getPcPage() + tProcess.getBeginMemoryIndex()) +
+                        " Physical page in " +
+                        tProcess.getPc() +
+                        " Instruction for process " + tProcess.getPid());
 
                 tProcess.addPc ();
             }

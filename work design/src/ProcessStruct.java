@@ -39,6 +39,20 @@ public class ProcessStruct {
     public List<Integer> getPageTableIndex () {
         return pageTableIndex;
     }
+    // FIFO页面置换算法，选择在页表项中留存时间最长的页表项
+    public List<Integer> selectPtEntryIndex(){
+        // FIFO页面置换
+        // 选择在页表项中留存时间最长的页表项
+        // 每次都将新的放在队列首，其他的老的，自然向后移动
+
+        List<Integer> tpIndex = new ArrayList<> ();
+        tpIndex.add (pageTableIndex.get (pageTableIndex.size ()-1));
+        for (int i = 0; i < pageTableIndex.size ()-1; i++) {
+            tpIndex.add (pageTableIndex.get (i));
+        }
+        pageTableIndex = tpIndex;
+        return pageTableIndex;
+    }
 
     public ProcessStruct(int beginMemoryIndex, int pid, String processName, ProcessState state, int priority,
                          int memorySize) {

@@ -1,15 +1,19 @@
+import org.apache.log4j.Logger;
+
 import java.util.*;
 public class MemoryBlock {
+    public static Logger logger = Logger.getLogger (MemoryBlock.class);
+
     private int blockId;
     private boolean isAllocated;
     private int processId; // The ID of the process using this block, -1 if it's free
     private List<Instruction> instructionList;
-    public static int BlockSize = 20;
+    public static int BlockSize = 10;
     public Instruction getInstruction(int index){
         try{
             return instructionList.get (index);
         }catch (Exception e){
-            System.out.println ("Illegal index for getInstruction,please terminate and examine");
+            logger.info ("MemoryBlock: Illegal index for getInstruction,please terminate and examine");
             return new Instruction ();
         }
     }

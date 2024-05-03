@@ -1,4 +1,6 @@
+import org.apache.log4j.Logger;
 public class MemoryManager {
+    public static Logger logger = Logger.getLogger (MemoryManager.class);
     private MemoryBlock[] memoryBlocks; // Array of memory blocks representing the physical memory
     private int totalBlocks; // Total number of blocks in memory
 
@@ -35,6 +37,8 @@ public class MemoryManager {
                         memoryBlocks[j].setAllocated(true);
                         memoryBlocks[j].setProcessId(processId);
                     }
+                    logger.info("Memory Management: Allocated " + numberOfBlocks + " blocks starting at index " + beginIndex + " for PID " + processId + ".");
+
                     return beginIndex;
                 }
             } else {
@@ -55,6 +59,7 @@ public class MemoryManager {
                 block.setProcessId(-1);
             }
         }
+        logger.info("Memory Management: Freed memory blocks allocated to PID: " + processId + ".");
     }
 
     // Getters
