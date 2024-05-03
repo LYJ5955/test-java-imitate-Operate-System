@@ -7,6 +7,8 @@ public enum InterruptState {
     ProcessTerminate,
     PriorityAdjust,
     CreateProcess,
+    CreateFile,
+    CreateDirectory,
     NoInterrupt,
     OutputSysInformation,
 }

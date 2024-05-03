@@ -4,12 +4,13 @@ public class Main {
 
         System.out.println ("Hello world!");
         OS myOs = new OS ();
+        myOs.start ();
         IoClass ioClass = new IoClass ();
         ioClass.start ();
-//        UseOs useOs = new UseOs ();
-//        useOs.start ();
-        myOs.start ();
+        UseOs useOs = new UseOs ();
+        useOs.start ();
         myOs.run ();
+
 
     }
 }

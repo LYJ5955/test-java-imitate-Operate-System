@@ -128,6 +128,62 @@ public class OS {
         }
     }
 
+    // output information in OS system
+    public static void OutputOsInformation (){
+        // queue
+        // process state
+        System.out.println("Ready Queue:");
+        logger.info("Ready Queue:");
+        printQueue(readyQueue);
+
+        System.out.println("Blocked Queue:");
+        logger.info("Blocked Queue:");
+        printQueue(blockedQueue);
+
+//        System.out.println("Running Queue:");
+//        logger.info("Running Queue:");
+//        printQueue(runningQueue);
+
+        System.out.println("Terminate Queue:");
+        logger.info("Terminate Queue:");
+        printQueue(terminateQueue);
+
+        logger.info("Process Information");
+        System.out.println ("Process Information");
+        for (Map.Entry<Integer, ProcessStruct> entry : processMap.entrySet()) {
+            printProcess(entry.getKey(), entry.getValue());
+        }
+    }
+    public static void printQueue(Queue<Integer> queue) {
+        if (queue.isEmpty()) {
+            logger.info("  [Queue is empty]");
+            System.out.println("  [Queue is empty]");
+        } else {
+            StringBuilder sb = new StringBuilder();
+            for (Integer item : queue) {
+                sb.append(item).append(" ");
+            }
+            logger.info(sb.toString());
+            System.out.println(sb.toString()); // Prints all elements
+        }
+    }
+
+    private static void printProcess(Integer key, ProcessStruct process) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("  PID: ").append(process.getPid())
+                .append("\n  Process Name: ").append(process.getProcessName())
+                .append("\n  State: ").append(process.getState())
+                .append("\n  Priority: ").append(process.getPriority())
+                .append("\n  Memory Size: ").append(process.getMemorySize())
+                .append("\n  Begin Memory Index: ").append(process.getBeginMemoryIndex())
+                .append("\n  PC: ").append(process.getPc())
+                .append("\n  PC Page: ").append(process.getPcPage())
+                .append("\n  Page Table Indexes: ").append(process.getPageTableIndex())
+                .append("\n");
+
+        logger.info(sb.toString());
+        System.out.println(sb.toString());
+    }
 
     // For example, a method to create a new process:
     public static Integer createProcess (String processName, int priority, int memorySize,String fileName) {
@@ -304,10 +360,12 @@ public class OS {
         // 目前使用代码自动生成测试用例
         // createWorkflow (scanner); //创建工作
         testExampleCreate ();
+        createDirectory ("dfDir");
+        createFile ("dfFile",null);
         inspectWorkflow (scanner); //展示工作
         deleteWorkflow (scanner); //删除工作
 
-        System.out.println ("\n Pre-configuration End, let's running!!!\n\n");
+        System.out.println ("\n Pre-configuration End\n");
     }
     public void testExampleCreate() {
 //        createDirectory ("Dir1");
@@ -361,18 +419,21 @@ public class OS {
             int memorySize = (int) (Math.random() * 10 + 1); // Memory size between 1 and 10
             String fileName = associatedFiles[(int) (Math.random() * associatedFiles.length)]; // Random file association, excluding File7
 
-            createProcess(processName, priority, memorySize, fileName);
-            System.out.println("Created process: " + processName + " with priority: " + priority +
-                    ", memory size: " + memorySize + " and associated with file: " + fileName);
-            ProcessStruct tProcess = OS.getProcessMap ().get (i);
-            System.out.println ("begin index is :"+tProcess.getBeginMemoryIndex ());
-            for (int j = 0; j < memorySize; j++) {
-                MemoryBlock tpBlock = memoryManager.getMemoryBlocks ()[tProcess.getBeginMemoryIndex ()+j];
-                System.out.println ("block :"+(j+tProcess.getBeginMemoryIndex ()));
-                for (int k = 0; k < MemoryBlock.BlockSize; k++) {
-                    System.out.print(tpBlock.getInstruction (k).getState ());
+            if(-1!=createProcess(processName, priority, memorySize, fileName)){
+                System.out.println("Created process: " + processName + " with priority: " + priority +
+                        ", memory size: " + memorySize + " and associated with file: " + fileName);
+                ProcessStruct tProcess = OS.getProcessMap ().get (i);
+                System.out.println ("begin index is :"+tProcess.getBeginMemoryIndex ());
+                for (int j = 0; j < memorySize; j++) {
+                    MemoryBlock tpBlock = memoryManager.getMemoryBlocks ()[tProcess.getBeginMemoryIndex ()+j];
+                    System.out.println ("block :"+(j+tProcess.getBeginMemoryIndex ()));
+                    for (int k = 0; k < MemoryBlock.BlockSize; k++) {
+                        System.out.print(tpBlock.getInstruction (k).getState ());
+                    }
+                    System.out.println ();
                 }
-                System.out.println ();
+            }else {
+                System.out.println ("error IN PID "+i);
             }
         }
     }
@@ -605,6 +666,11 @@ public class OS {
 
     // Methods to simulate the system running, scheduling, etc.
     public void run () throws Exception {
+
+
+
+        System.out.println ("Our OS Win99 Plus is Running!\n");
+      //  logger.info ("ttttttttttttttttttttttttttttttt");
 //        logger.info ("Begin Running!!!");
         // Implementation of the main simulation loop
         /*
@@ -655,7 +721,7 @@ public class OS {
                         if(thProcess.getState ()!=ProcessState.TERMINATED){
                             if(thProcess.getPcPage()<thProcess.getMemorySize ()){
                                 while (true) {
-                                    Thread.sleep (100);
+                                    Thread.sleep (300);
                                     // 去页表寻找是否有该物理页
                                     if (false == pageTable.isContainPhysicalPage (thProcess)) {
                                         // 页表项中无物理页，进行缺页错误
@@ -758,6 +824,7 @@ public class OS {
                 }
             }
             if(OS.interruptManager.getInterruptNum ()!=0) {
+
                 OS.interruptManager.executeInterrupt ();
             }
         }

@@ -1,6 +1,7 @@
 import java.util.*;
 import org.apache.log4j.Logger;
 public class PageTable {
+
     public static Logger logger = Logger.getLogger (PageTable.class);
 
     // A pageTable is a set of PageTableEntry
@@ -74,7 +75,7 @@ public class PageTable {
 
     // allocated the particular entries to one process
     public void setOneEntries(int index,int pid,int physicalIndex){
-        System.out.println ("allocate the " + index + "th pageTable entries to the process pid:" + pid);
+        logger.info ("Page Table: allocate the " + index + "th pageTable entries to the process pid:" + pid);
         entries[index] = new PageTableEntry (physicalIndex, true, false,
                 AccessPermissions.ALL, pid);
     }
@@ -178,16 +179,18 @@ public class PageTable {
                     tpProcess.getPageTableIndex().add(tpIndex);
                 } else {
                     // 处理无效tpIndex
-                    System.out.println("Invalid tpIndex: " + tpIndex);
+                    logger.info ("Page Table: Invalid tpIndex: " + tpIndex);
+
                 }
             }
         } catch (Exception e) {
             // 打印出异常的相关信息来帮助诊断问题
-            System.out.println("Exception caught: " + e.getMessage());
-            System.out.println("Entries length: " + entries.length);
+            logger.info ("Page Table: Exception caught: "+ e.getMessage()+ " Entries length: " + entries.length);
+
             // 这里需要检查tpIndex是否在有效范围内来避免在异常处理中引发另一个异常
             if(tpIndex >= 0 && tpIndex < entries.length) {
-                System.out.println("Process pageTableIndex size: " + OS.processMap.get(entries[tpIndex].getAllocatedPid())
+
+                logger.info ("Process pageTableIndex size: " + OS.processMap.get(entries[tpIndex].getAllocatedPid())
                         .getPageTableIndex().size());
             }
         }

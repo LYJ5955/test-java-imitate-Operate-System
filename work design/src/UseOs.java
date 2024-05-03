@@ -10,7 +10,7 @@ public class UseOs extends Thread {
             System.out.println("2: Create File");
             System.out.println("3: Create Process");
             System.out.println("4: Shutdown System");
-            System.out.println("5: Adjust Priority");
+            System.out.println("5: Adjust Process Priority");
             System.out.println("6: Output System Information");
             System.out.println("Please input:");
 
@@ -18,22 +18,30 @@ public class UseOs extends Thread {
                 int choice = scanner.nextInt();
                 switch (choice) {
                     case 1:
-                        //createDirectory(scanner);
+                        // 1: Create Directory
+                        // should create new interrupt
+                        OS.addInterrupt (new CreateDirtoryInterrupt (1));
                         break;
                     case 2:
-                        //createFile(scanner);
+                        // 2: Create File
+                        OS.addInterrupt (new CreateFileInterrupt (1));
                         break;
                     case 3:
-                        //createProcess(scanner);
+                        // 3: Create Process
+                        OS.addInterrupt (new CreateProcessInterrupt (1));
                         break;
                     case 4:
-                        //shutdownSystem();
+                        // 4: Shutdown System
+                        OS.addInterrupt (new ElectronicBreakInterrupt (5));
                         break;
                     case 5:
-                        //adjustPriority(scanner);
+                        // 5: Adjust Process Priority
+                        System.out.println ("please input process Pid to adjust priority");
+                        OS.addInterrupt (new priorityAdjustInterrupt (scanner.nextInt (),1));
                         break;
                     case 6:
-                        //(scanner);
+                        // 6: Output System Information
+                        OS.addInterrupt (new OutputSysInformation (1));
                         break;
                     case 0:
                         //System.out.println("Exiting...");
